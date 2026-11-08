@@ -1,0 +1,13 @@
+# Tharsis
+
+Hobby OS プロジェクト。
+
+- 実装言語: D言語
+- アーキテクチャ: RISCV 64ビット
+
+## 開発環境
+
+Ubuntu 24.04で開発中。
+
+- LDC (1.43.0)
+- qemu-system-riscv

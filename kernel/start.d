@@ -10,6 +10,8 @@ extern (C):
 nothrow:
 @system:
 
+// DTBはブートROMや前段のブートローダがa1で渡すことを想定している。
+// 今のところはQEMUでしか動かさないのでこのままで問題ない。
 noreturn start(ulong hartid, void* dtb)
 {
     // MPP: Machine Previous Privilege

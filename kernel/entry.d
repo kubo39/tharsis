@@ -12,7 +12,7 @@ nothrow:
 @naked noreturn entry()
 {
     // スタックをセットする。
-    // 今のところqemuで-cpu 1を指定しているので、
+    // 今のところqemuで-smp 1を指定しているので、
     // mhartid: 0 でspは __stack_top から変わってない。
     __asm(`
         la sp, __stack_top  # スタックポインタに stack topのアドレスをセット

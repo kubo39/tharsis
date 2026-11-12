@@ -15,3 +15,4 @@ Ubuntu 24.04で開発中。
 ## 参考文献・実装
 
 - [xv6-riscv](https://github.com/mit-pdos/xv6-riscv)
+- [OS in 1,000 Lines](https://operating-system-in-1000-lines.vercel.app/ja/)

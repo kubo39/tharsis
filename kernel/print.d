@@ -1,5 +1,7 @@
 module kernel.print;
 
+import ldc.llvmasm;
+
 import kernel.uart;
 
 nothrow:
@@ -92,4 +94,13 @@ private void printHex(ulong v)
 void putchar(char c)
 {
     kernel.uart.writeByte(cast(ubyte) c);
+}
+
+noreturn panic(Args...)(Args args)
+{
+    print(args);
+    while (true)
+    {
+        __asm("wfi", "");
+    }
 }

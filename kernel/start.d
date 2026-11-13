@@ -12,7 +12,7 @@ nothrow:
 
 // DTBはブートROMや前段のブートローダがa1で渡すことを想定している。
 // 今のところはQEMUでしか動かさないのでこのままで問題ない。
-noreturn start(ulong hartid, void* dtb)
+void start(ulong hartid, void* dtb)
 {
     // MPP: Machine Previous Privilege
     // Sモードにセットする
@@ -35,8 +35,4 @@ noreturn start(ulong hartid, void* dtb)
 
     // Sモードに切り替え
     __asm("mret", "{x10},{x11}", hartid, dtb);
-    while (true)
-    {
-        __asm("wfi", "");
-    }
 }

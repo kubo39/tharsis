@@ -9,7 +9,7 @@ nothrow:
 @system:
 
 @section(".text.boot")
-@naked noreturn entry()
+@naked void entry()
 {
     // スタックをセットする。
     // 今のところqemuで-smp 1を指定しているので、
@@ -21,8 +21,4 @@ nothrow:
         sub sp, sp, t0
         j start
     `, "");
-    while (true)
-    {
-        __asm("wfi", "");
-    }
 }

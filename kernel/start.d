@@ -34,5 +34,5 @@ void start(ulong hartid, void* dtb)
     writeCsr!"mideleg"(0xffff);    
 
     // Sモードに切り替え
-    __asm("mret", "{x10},{x11}", hartid, dtb);
+    __asm("mret", "{a0},{a1}", hartid, dtb);
 }

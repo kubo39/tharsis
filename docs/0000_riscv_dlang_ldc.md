@@ -10,6 +10,8 @@ RISC-Vを選定したのは
 - 上記にあるように、OS開発の資料がそこそこ豊富にある
   - https://github.com/riscv/learn とかにもリソースがまとまっているし、自作OS先駆者もけっこういる([xv6-riscv](https://github.com/mit-pdos/xv6-riscv)など)
 
+といったあたり。
+
 ## D言語
 
 自作OSではC言語とRust、C++が使われることが多いが、もちろんそれ以外の言語でもできる。うん、できるはず。

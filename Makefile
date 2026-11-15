@@ -8,6 +8,7 @@ build/kernel.elf: kernel/*.d kernel/kernel.ld
 		--relocation-model=static \
 		--transition=tls \
 		-betterC \
+		-O2 \
 		-c \
 		-od=build \
 		-op kernel/*.d

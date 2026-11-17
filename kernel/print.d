@@ -93,7 +93,7 @@ private void printHex(ulong v)
 
 void putchar(char c)
 {
-    kernel.uart.writeByte(cast(ubyte) c);
+    kernel.uart.putchar(cast(ubyte) c);
 }
 
 noreturn panic(Args...)(Args args)

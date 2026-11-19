@@ -4,7 +4,6 @@ import core.volatile;
 
 import kernel.memorylayout;
 
-extern (C):
 nothrow:
 @nogc:
 @system:

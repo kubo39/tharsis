@@ -37,6 +37,9 @@ OS開発においてよく利用する機能としては:
 
 - インラインアセンブリ
 - 一部の関数属性 (`ldc.attributes.naked`, `ldc.attributes.section`)
+- `core.volatile.volatileLoad` / `core.volatile.volatileStore`
+
+などがある。
 
 ### インラインアセンブリ
 

@@ -2,6 +2,7 @@ module kernel.main;
 
 import ldc.llvmasm : __asm;
 
+import kernel.klibc;
 import kernel.print;
 import kernel.riscv;
 import kernel.trap;
@@ -12,8 +13,12 @@ extern (C):
 nothrow:
 @system:
 
+extern __gshared ubyte[0] __bss;
+extern __gshared ubyte[0] __bss_end;
+
 noreturn kmain(ulong hartid, void* dtb)
 {
+    memset(__bss.ptr, 0x0, __bss_end.ptr - __bss.ptr);
     writeCsr!"stvec"(cast(ulong) &kernelEntry);
     kernel.uart.init();
     kernel.print.print("Hello, World!\n");

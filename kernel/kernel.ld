@@ -39,6 +39,8 @@ SECTIONS
     }
 
     . = ALIGN(0x1000);
+    __free_ram = .;
+    __free_ram_end = 0x88000000;
 
     .comment          0 : { *(.comment) }
     .riscv.attributes 0 : { *(.riscv.attributes) }

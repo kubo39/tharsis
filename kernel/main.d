@@ -2,6 +2,7 @@ module kernel.main;
 
 import ldc.llvmasm : __asm;
 
+import kernel.kalloc;
 import kernel.klibc;
 import kernel.print;
 import kernel.riscv;
@@ -21,6 +22,7 @@ noreturn kmain(ulong hartid, void* dtb)
     memset(__bss.ptr, 0x0, __bss_end.ptr - __bss.ptr);
     writeCsr!"stvec"(cast(ulong) &kernelEntry);
     kernel.uart.init();
+    kernel.kalloc.init();
     kernel.print.print("Hello, World!\n");
     while (true)
     {

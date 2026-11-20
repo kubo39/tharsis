@@ -24,8 +24,6 @@ struct PageAllocator
 nothrow:
 @system:
 
-    @disable this(this);  // コピー禁止
-
     void* alloc()
     {
         FreePage* p = head;
@@ -51,6 +49,10 @@ nothrow:
     }
 
 private:
+    @disable this(this);  // コピー禁止
+
+    @disable ref PageAllocator opAssign(ref PageAllocator);  // 代入禁止
+
     FreePage* head;
 }
 

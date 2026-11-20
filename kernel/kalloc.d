@@ -2,12 +2,11 @@ module kernel.kalloc;
 
 import kernel.klibc;
 import kernel.print;
+import kernel.riscv;
 
 @nogc:
 nothrow:
 @system:
-
-enum PAGE_SIZE = 4096;
 
 extern(C) extern __gshared ubyte[0] __free_ram;
 extern(C) extern __gshared ubyte[0] __free_ram_end;

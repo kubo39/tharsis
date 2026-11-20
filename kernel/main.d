@@ -4,6 +4,7 @@ import ldc.llvmasm : __asm;
 
 import kernel.kalloc;
 import kernel.klibc;
+import kernel.pagetable;
 import kernel.print;
 import kernel.riscv;
 import kernel.trap;
@@ -23,6 +24,10 @@ noreturn kmain(ulong hartid, void* dtb)
     writeCsr!"stvec"(cast(ulong) &kernelEntry);
     kernel.uart.init();
     kernel.kalloc.init();
+    kernel.pagetable.initKernelPageTable();
+    kernel.pagetable.enablePaging();
+    print("paging enabled: satp=", cast(void*) readCsr!"satp", "\n");
+
     kernel.print.print("Hello, World!\n");
     while (true)
     {

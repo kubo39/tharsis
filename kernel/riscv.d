@@ -6,6 +6,8 @@ import ldc.llvmasm : __asm;
 nothrow:
 @system:
 
+enum PAGE_SIZE = 4096;
+
 enum ulong MSTATUS_MPP_MASK = 3UL << 11;
 enum ulong MSTATUS_MPP_S = 1UL << 11;
 

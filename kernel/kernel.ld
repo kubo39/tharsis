@@ -3,11 +3,12 @@ ENTRY(entry)
 SECTIONS
 {
     . = 0x80000000;
+    PROVIDE(__kernel_base = .);
 
     .text : {
-        KEEP(*(.text.boot))
+        KEEP(*(.text.boot));
         . = ALIGN(4);
-        KEEP(*(.text.trap))
+        KEEP(*(.text.trap));
         *(.text .text.*)
     }
 
@@ -15,21 +16,21 @@ SECTIONS
     PROVIDE(__etext = .);
 
     .rodata : ALIGN(16) {
-        __rodata = .;
+        PROVIDE(__rodata = .);
         *(.rodata .rodata.*);
-        __rodata_end = .;
+        PROVIDE(__rodata_end = .);
     }
 
     .data : ALIGN(16) {
-        __data = .;
+        PROVIDE(__data = .);
         *(.data .data.*);
-        __data_end = .;
+        PROVIDE(__data_end = .);
     }
 
     .bss : ALIGN(16) {
-        __bss = .;
+        PROVIDE(__bss = .);
         *(.bss .bss.*);
-        __bss_end = .;
+        PROVIDE(__bss_end = .);
     }
 
     .stack(NOLOAD) : ALIGN(16) {
@@ -39,8 +40,8 @@ SECTIONS
     }
 
     . = ALIGN(0x1000);
-    __free_ram = .;
-    __free_ram_end = 0x88000000;
+    PROVIDE(__free_ram = .);
+    PROVIDE(__free_ram_end = 0x88000000);
 
     .comment          0 : { *(.comment) }
     .riscv.attributes 0 : { *(.riscv.attributes) }
@@ -49,6 +50,6 @@ SECTIONS
     .shstrtab         0 : { *(.shstrtab) }
 
     /DISCARD/ : {
-        *(.eh_frame) *(.eh_frame_hdr)
+        *(.eh_frame)
     }
 }

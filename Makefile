@@ -14,6 +14,7 @@ build/kernel.elf: kernel/*.d kernel/kernel.ld
 		-op kernel/*.d
 	ld.lld \
 		--discard-locals \
+		--gc-sections \
 		-T kernel/kernel.ld \
 		--orphan-handling=warn \
 		-o $@ \

@@ -72,12 +72,12 @@ nothrow:
     bool map(ulong vaddr, ulong paddr, size_t size, ulong perm)
     {
         if (size == 0)
-            panic("map size: 0\n");
+            panic!"map size: 0";
 
         if (vaddr % PAGE_SIZE != 0)
-            panic("unaligned vaddr: ", vaddr, "\n");
+            panic!"unaligned vaddr: %d"(vaddr);
         if (paddr % PAGE_SIZE != 0)
-            panic("unaligned paddr: ", paddr, "\n");
+            panic!"unaligned paddr: %d"(paddr);
 
         for (ulong offset = 0; offset < size; offset += PAGE_SIZE)
         {
@@ -85,7 +85,7 @@ nothrow:
             if (entry is null)
                 return false;
             if (entry.valid)
-                panic("map: remap occurred!\n");
+                panic!"map: remap occurred!";
             *entry = PageTableEntry.make(paddr + offset, perm | PAGE_A | PAGE_D | PAGE_V);
         }
         return true;
@@ -139,12 +139,12 @@ void initKernelPageTable()
 {
     auto root = cast(PageTable*) pageAllocator.alloc();
     if (root is null)
-        panic("kernel page table allocation failed.\n");
+        panic!"kernel page table allocation failed.";
     memset(root, 0x0, PAGE_SIZE);
 
     // UART
     if (!root.map(UART0, UART0, PAGE_SIZE, PAGE_R | PAGE_W))
-        panic("failed to map UART.\n");
+        panic!"failed to map UART.";
 
     // .text(カーネルコード)
     if (!root.map(
@@ -152,7 +152,7 @@ void initKernelPageTable()
         cast(ulong) (__etext.ptr - __kernel_base.ptr),
         PAGE_R | PAGE_X
     ))
-        panic("failed to map kernel code.\n");
+        panic!"failed to map kernel code.";
 
     // .rodata/.data/.bss/.stack/RAM
     if (!root.map(
@@ -160,7 +160,7 @@ void initKernelPageTable()
         cast(ulong) (__free_ram_end.ptr - __etext.ptr),
         PAGE_R | PAGE_W
     ))
-        panic("failed to map kernel data/RAM sections.\n");
+        panic!"failed to map kernel data/RAM sections.";
 
     kernelPageTable = root;
 }

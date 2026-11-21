@@ -53,7 +53,7 @@ void handleTrap(TrapFrame* frame)
     const stval = readCsr!"stval";
     const sepc = readCsr!"sepc";
 
-    panic("unexpected trap scause=", scause, ", stval=", stval, ", sepc=", cast(void*)sepc, "\n");
+    panic!"unexpected trap scause=%x, stval=%x, sepc=%x"(scause, stval, cast(void*)sepc);
 }
 
 @section(".text.trap")

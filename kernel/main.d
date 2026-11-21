@@ -26,9 +26,8 @@ noreturn kmain(ulong hartid, void* dtb)
     kernel.kalloc.init();
     kernel.pagetable.initKernelPageTable();
     kernel.pagetable.enablePaging();
-    print("paging enabled: satp=", cast(void*) readCsr!"satp", "\n");
-
-    kernel.print.print("Hello, World!\n");
+    kernel.print.printf!"paging enabled: satp=0x%x\n"( cast(void*) readCsr!"satp");
+    kernel.print.printf!("Hello, World!\n");
     while (true)
     {
         __asm("wfi", "");

@@ -41,7 +41,7 @@ nothrow:
             || p < __free_ram.ptr
             || p >= __free_ram_end.ptr)
         {
-            panic("free: invalid page ", p, "\n");
+            panic!"free: invalid page %x"(p);
         }
         auto page = cast(FreePage*) p;
         page.next = head;

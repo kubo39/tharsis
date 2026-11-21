@@ -28,6 +28,7 @@ noreturn kmain(ulong hartid, void* dtb)
     kernel.pagetable.enablePaging();
     kernel.print.printf!"paging enabled: satp=0x%x\n"( cast(void*) readCsr!"satp");
     kernel.print.printf!("Hello, World!\n");
+    //assert(2 == 1);
     while (true)
     {
         __asm("wfi", "");

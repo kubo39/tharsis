@@ -4,7 +4,7 @@ build/kernel.elf: kernel/*.d kernel/kernel.ld
 		-mtriple=riscv64-unknown-none-elf \
 		-mattr=+m,+c \
 		-code-model=medium \
-		--checkaction=halt \
+		--checkaction=C \
 		--relocation-model=static \
 		--transition=tls \
 		-betterC \

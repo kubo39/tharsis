@@ -2,7 +2,7 @@ build/kernel.elf: kernel/*.d kernel/kernel.ld
 	mkdir -p build
 	ldc2 \
 		-mtriple=riscv64-unknown-none-elf \
-		-mattr=+m,+c \
+		-mattr=+m,+c,+relex \
 		-code-model=medium \
 		--checkaction=halt \
 		--relocation-model=static \

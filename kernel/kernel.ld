@@ -49,6 +49,16 @@ SECTIONS
     .strtab           0 : { *(.strtab) }
     .shstrtab         0 : { *(.shstrtab) }
 
+    .debug_abbrev     0 : { *(.debug_abbrev) }
+    .debug_info       0 : { *(.debug_info) }
+    .debug_str        0 : { *(.debug_str) }
+    .debug_pubnames   0 : { *(.debug_pubnames) }
+    .debug_pubtypes   0 : { *(.debug_pubtypes) }
+    .debug_line       0 : { *(.debug_line) }
+    .debug_loc        0 : { *(.debug_loc) }
+    .debug_ranges     0 : { *(.debug_ranges) }
+    .debug_frame      0 : { *(.debug_frame) }
+
     /DISCARD/ : {
         *(.eh_frame)
     }

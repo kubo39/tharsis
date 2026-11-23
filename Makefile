@@ -7,6 +7,8 @@ build/kernel.elf: kernel/*.d kernel/kernel.ld
 		--checkaction=C \
 		--relocation-model=static \
 		--transition=tls \
+		-g \
+		--force-dwarf-frame-section \
 		-betterC \
 		-O2 \
 		-c \

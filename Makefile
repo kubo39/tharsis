@@ -22,6 +22,9 @@ build/kernel.elf: kernel/*.d kernel/kernel.ld
 		-o $@ \
 		$$(find build -name '*.o')
 
+# make run-qemu DEBUG=1 で gdb の接続を待つ (localhost:1234)
+QEMU_DEBUG := $(if $(filter 1,$(DEBUG)),-s -S)
+
 .PHONY: run-qemu
 run-qemu: build/kernel.elf
 	qemu-system-riscv64 \
@@ -32,6 +35,7 @@ run-qemu: build/kernel.elf
 		--no-reboot \
 		-smp 1 \
 		-d int,guest_errors -D qemu.log \
+		$(QEMU_DEBUG) \
 		-kernel $<
 
 .PHONY: clean

@@ -9,6 +9,7 @@ build/kernel.elf: kernel/*.d kernel/kernel.ld
 		--transition=tls \
 		-g \
 		--force-dwarf-frame-section \
+		--frame-pointer=all \
 		-betterC \
 		-O2 \
 		-c \

@@ -35,11 +35,7 @@ void backtrace()
         ulong ra = *cast(ulong*) (fp - 8);
         if (ra == 0)
             break;
-        putchar(cast(char) ('0' + depth / 10));
-        putchar(cast(char) ('0' + depth % 10));
-        putchar(':');
-        putHex(ra - 2);  // C拡張なので2
-        putchar('\n');
+        printf!"  #%d:%x\n"(depth, ra - 2);
         fp = *cast(ulong*) (fp - 16);
         depth++;
     }

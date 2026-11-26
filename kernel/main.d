@@ -7,6 +7,7 @@ import kernel.klibc;
 import kernel.pagetable;
 import kernel.print;
 import kernel.riscv;
+import kernel.sections;
 import kernel.timer;
 import kernel.trap;
 import kernel.uart;
@@ -15,9 +16,6 @@ extern (C):
 @nogc:
 nothrow:
 @system:
-
-extern __gshared ubyte[0] __bss;
-extern __gshared ubyte[0] __bss_end;
 
 noreturn kmain(ulong hartid, void* dtb)
 {

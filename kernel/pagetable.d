@@ -7,14 +7,11 @@ import kernel.klibc : memset;
 import kernel.memorylayout : UART0;
 import kernel.print;
 import kernel.riscv;
+import kernel.sections;
 
 @nogc:
 nothrow:
 @system:
-
-extern(C) extern __gshared ubyte[0] __kernel_base;
-extern(C) extern __gshared ubyte[0] __etext;
-extern(C) extern __gshared ubyte[0] __free_ram_end;
 
 enum ulong SATP_SV39 = 8UL << 60;
 

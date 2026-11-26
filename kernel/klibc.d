@@ -8,7 +8,7 @@ nothrow:
 import ldc.intrinsics : llvm_frameaddress;
 import ldc.llvmasm : __asm;
 
-import kernel.pagetable;
+import kernel.sections;
 import kernel.print;
 
 void* memset(void* buf, int c, size_t n)

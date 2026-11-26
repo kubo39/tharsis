@@ -3,13 +3,11 @@ module kernel.kalloc;
 import kernel.klibc;
 import kernel.print;
 import kernel.riscv;
+import kernel.sections;
 
 @nogc:
 nothrow:
 @system:
-
-extern(C) extern __gshared ubyte[0] __free_ram;
-extern(C) extern __gshared ubyte[0] __free_ram_end;
 
 __gshared PageAllocator pageAllocator;
 

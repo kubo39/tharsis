@@ -28,8 +28,8 @@ void backtrace()
     uint depth = 0;
     while (fp != 0
       && (fp & 7) == 0
-      && fp > cast(ulong) __kernel_base.ptr
-      && fp < cast(ulong) __free_ram_end.ptr
+      && fp > cast(ulong) __stack_bottom.ptr
+      && fp <= cast(ulong) __stack_top.ptr  // 一番外側のフレームでは fp == __stack_top
       && depth < 16)
     {
         ulong ra = *cast(ulong*) (fp - 8);

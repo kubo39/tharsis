@@ -33,6 +33,10 @@ void start(ulong hartid, void* dtb)
     writeCsr!"medeleg"(0xffff);
     writeCsr!"mideleg"(0xffff);    
 
+    // Sstc: S-mode から stimecmp でタイマを設定できるようにする
+    setCsr!"menvcfg"(MENVCFG_STCE);
+    setCsr!"mcounteren"(MCOUNTEREN_TM);
+
     // Sモードに切り替え
     __asm("mret", "{a0},{a1}", hartid, dtb);
 }

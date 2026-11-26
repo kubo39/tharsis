@@ -5,6 +5,7 @@ import ldc.llvmasm;
 
 import kernel.print;
 import kernel.riscv;
+import kernel.timer;
 
 extern (C):
 nothrow:
@@ -50,6 +51,12 @@ struct TrapFrame
 void handleTrap(ref TrapFrame frame)
 {
     const scause = readCsr!"scause";
+    if (scause == SCAUSE_S_TIMER)
+    {
+        kernel.timer.handleInterrupt();
+        return;
+    }
+
     const stval = readCsr!"stval";
     const sepc = readCsr!"sepc";
 

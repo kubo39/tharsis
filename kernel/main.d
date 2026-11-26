@@ -7,6 +7,7 @@ import kernel.klibc;
 import kernel.pagetable;
 import kernel.print;
 import kernel.riscv;
+import kernel.timer;
 import kernel.trap;
 import kernel.uart;
 
@@ -28,7 +29,8 @@ noreturn kmain(ulong hartid, void* dtb)
     kernel.pagetable.enablePaging();
     kernel.print.printf!"paging enabled: satp=0x%x\n"( cast(void*) readCsr!"satp");
     kernel.print.printf!("Hello, World!\n");
-    assert(2 == 1);
+    kernel.timer.init();
+    setCsr!"sstatus"(SSTATUS_SIE);
     while (true)
     {
         __asm("wfi", "");

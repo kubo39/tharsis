@@ -47,7 +47,7 @@ struct TrapFrame
     ulong __padding;
 }
 
-void handleTrap(TrapFrame* frame)
+void handleTrap(ref TrapFrame frame)
 {
     const scause = readCsr!"scause";
     const stval = readCsr!"stval";

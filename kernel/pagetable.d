@@ -8,6 +8,7 @@ import kernel.memorylayout : UART0;
 import kernel.print;
 import kernel.riscv;
 import kernel.sections;
+import kernel.types;
 
 @nogc:
 nothrow:
@@ -26,7 +27,7 @@ enum ulong PAGE_D = 1 << 7;  // Dirty(書き込みがあったか)
 __gshared PageTable* kernelPageTable;
 
 pragma(inline, true)
-private ulong pageTableIndex(ulong vaddr, uint level)
+private ulong pageTableIndex(VAddr vaddr, uint level)
 {
     return (vaddr >> (12 + 9 * level)) & 0x1ff;
 }
@@ -39,7 +40,7 @@ struct PageTableEntry
 nothrow:
 @system:
 
-    static PageTableEntry make(ulong paddr, ulong flags)
+    static PageTableEntry make(PAddr paddr, ulong flags)
     {
         return PageTableEntry(((paddr >> 12) << 10) | flags);
     }
@@ -49,10 +50,10 @@ nothrow:
         return (raw & PAGE_V) != 0;
     }
 
-    ulong physAddr() const
+    PAddr physAddr() const
     {
         // 上位bit(63:54)は拡張用なのでPPNの44bitだけを取り出す
-        return ((raw >> 10) & ((1UL << 44) - 1)) << 12;
+        return PAddr(((raw >> 10) & ((1UL << 44) - 1)) << 12);
     }
 
 private:
@@ -66,15 +67,15 @@ struct PageTable
 nothrow:
 @system:
 
-    bool map(ulong vaddr, ulong paddr, size_t size, ulong perm)
+    bool map(VAddr vaddr, PAddr paddr, size_t size, ulong perm)
     {
         if (size == 0)
             panic!"map size: 0";
 
         if (vaddr % PAGE_SIZE != 0)
-            panic!"unaligned vaddr: %d"(vaddr);
+            panic!"unaligned vaddr: %d"(cast(ulong) vaddr);
         if (paddr % PAGE_SIZE != 0)
-            panic!"unaligned paddr: %d"(paddr);
+            panic!"unaligned paddr: %d"(cast(ulong) paddr);
 
         for (ulong offset = 0; offset < size; offset += PAGE_SIZE)
         {
@@ -88,7 +89,7 @@ nothrow:
         return true;
     }
 
-    PageTableEntry* walk(ulong vaddr, bool alloc)
+    PageTableEntry* walk(VAddr vaddr, bool alloc)
     {
         PageTable* table = &this;
         foreach_reverse (level; 1 .. 3)
@@ -96,7 +97,7 @@ nothrow:
             PageTableEntry* entry = &table.entries[pageTableIndex(vaddr, level)];
             if (entry.valid)
             {
-                table = cast(PageTable*) entry.physAddr;
+                table = cast(PageTable*) cast(ulong) entry.physAddr;
             }
             else
             {
@@ -107,7 +108,10 @@ nothrow:
                     return null;
                 memset(table, 0x0, PAGE_SIZE);
                 // R/W/X=0 なので「次の段のページテーブルを指す」PTEになる
-                *entry = PageTableEntry.make(cast(ulong) table, PAGE_V);
+                *entry = PageTableEntry.make(
+                    PAddr(cast(ulong) table),
+                    PAGE_V
+                );
             }
         }
         return &table.entries[pageTableIndex(vaddr, 0)];
@@ -140,12 +144,18 @@ void initKernelPageTable()
     memset(root, 0x0, PAGE_SIZE);
 
     // UART
-    if (!root.map(UART0, UART0, PAGE_SIZE, PAGE_R | PAGE_W))
+    if (!root.map(
+            VAddr(UART0),
+            PAddr(UART0),
+            PAGE_SIZE,
+            PAGE_R | PAGE_W)
+        )
         panic!"failed to map UART.";
 
     // .text(カーネルコード)
     if (!root.map(
-        cast(ulong) __kernel_base.ptr, cast(ulong) __kernel_base.ptr,
+        VAddr(cast(ulong) __kernel_base.ptr),
+        PAddr(cast(ulong) __kernel_base.ptr),
         cast(ulong) (__etext.ptr - __kernel_base.ptr),
         PAGE_R | PAGE_X
     ))
@@ -153,7 +163,8 @@ void initKernelPageTable()
 
     // .rodata/.data/.bss/.stack/RAM
     if (!root.map(
-        cast(ulong) __etext.ptr, cast(ulong) __etext.ptr,
+        VAddr(cast(ulong) __etext.ptr),
+        PAddr(cast(ulong) __etext.ptr),
         cast(ulong) (__free_ram_end.ptr - __etext.ptr),
         PAGE_R | PAGE_W
     ))

@@ -48,6 +48,8 @@ LDCのインラインアセンブリはほとんどLLVM内部に渡すだけだ�
 ```d
     __asm(`
         la sp, __stack_top  # スタックポインタに stack topのアドレスをセット
+        li fp, 0            # backtrace用
+        li ra, 0            # backtrace用
         csrr a0, mhartid
         slli t0, a0, 12     # a0 (mhartid) x 4096
         sub sp, sp, t0

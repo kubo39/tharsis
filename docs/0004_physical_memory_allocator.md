@@ -29,12 +29,9 @@ freelist方式のいいところとしては、実装が単純なのでバグを
 コードは全体としてこのようになる。
 要は確保したら(デバッグ用の値で埋めて)メモリ領域を返し、解放時にリストの先頭に追加して再利用可能なようにしているだけだ。また、初期化時にすべての利用可能なページをfreeしてリストに登録している。
 
+`PAGE_SIZE` は `kernel.riscv`、リンカスクリプトのシンボル(`__free_ram` など)は `kernel.sections` で定義している。
+
 ```d
-enum PAGE_SIZE = 4096;
-
-extern(C) extern __gshared ubyte[0] __free_ram;
-extern(C) extern __gshared ubyte[0] __free_ram_end;
-
 __gshared PageAllocator pageAllocator;
 
 private struct FreePage
@@ -47,8 +44,6 @@ struct PageAllocator
 @nogc:
 nothrow:
 @system:
-
-    @disable this(this);  // コピー禁止
 
     void* alloc()
     {
@@ -67,7 +62,7 @@ nothrow:
             || p < __free_ram.ptr
             || p >= __free_ram_end.ptr)
         {
-            panic("free: invalid page ", p, "\n");
+            panic!"free: invalid page %x"(p);
         }
         auto page = cast(FreePage*) p;
         page.next = head;
@@ -75,6 +70,10 @@ nothrow:
     }
 
 private:
+    @disable this(this);  // コピー禁止
+
+    @disable ref PageAllocator opAssign(ref PageAllocator);  // 代入禁止
+
     FreePage* head;
 }
 
